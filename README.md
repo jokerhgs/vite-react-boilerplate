@@ -25,7 +25,7 @@ npm install -g pnpm
 
 ```bash
 git clone https://github.com/jokerhgs/vite-react-boilerplate.git
-cd your-repo-name
+cd vite-react-boilerplate
 ```
 
 ---
