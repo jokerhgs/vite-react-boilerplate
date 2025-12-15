@@ -6,6 +6,11 @@ A lightweight and fast boilerplate for modern web development using:
 - **[React](https://react.dev/):** A declarative JavaScript library for building user interfaces with a component-based architecture.
 - **[Tailwind CSS](https://tailwindcss.com/):** A utility-first CSS framework for rapidly building custom user interfaces with consistent design.
 - **[React Router](https://reactrouter.com/):** A routing library for React that enables dynamic routing and navigation in single-page applications.
+- **[Zod](https://zod.dev/):** A TypeScript-first schema declaration and validation library.
+- **[Zustand](https://zustand-bear.github.io/):** A small, fast, and scalable bear-bones state-management solution using simplified flux principles.
+- **[React Hook Form](https://react-hook-form.com/):** A performant, flexible and extensible forms library with easy-to-use validation.
+- **[Axios](https://axios-http.com/):** A promise-based HTTP client for the browser and Node.js.
+- **[Vitest](https://vitest.dev/):** A blazing fast unit test framework powered by Vite.
 - **[ESLint](https://eslint.org/):** A pluggable linter to identify and fix problems in JavaScript and React codebases.
 - **[pnpm](https://pnpm.io/):** A fast, disk space-efficient package manager that uses a content-addressable file system.
 
@@ -48,4 +53,10 @@ pnpm dev
 
 ```bash
 pnpm lint
+```
+
+### Run tests with Vitest:
+
+```bash
+pnpm test
 ```
