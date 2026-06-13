@@ -29,7 +29,7 @@ export function useConsent() {
 
   useEffect(() => {
     const w = window as unknown as Record<string, unknown>;
-    const gtag = w.__gtag as ((...args: unknown[]) => void) | undefined;
+    const gtag = w.gtag as ((...args: unknown[]) => void) | undefined;
 
     if (consent === "granted" && typeof gtag === "function") {
       gtag("consent", "update", { analytics_storage: "granted" });
