@@ -13,6 +13,7 @@ A premium, lightweight, and fast boilerplate for modern web development. Now fea
 - **[Zod](https://zod.dev/):** TypeScript-first schema validation.
 - **[Vitest](https://vitest.dev/):** Powerful unit testing.
 - **[ESLint](https://eslint.org/):** Code quality and consistency.
+- **[GA4 Analytics](./analytics.readme):** GDPR-compliant Google Analytics 4 with Consent Mode v2 (on `ga4-integration` branch).
 
 ---
 
@@ -21,15 +22,17 @@ A premium, lightweight, and fast boilerplate for modern web development. Now fea
 This boilerplate uses a custom dynamic routing engine that mimics the Next.js App Router. No more manual route definitions!
 
 ### How it works:
+
 Place your components in `src/app/` following the `folder/page.tsx` convention:
 
-| File Path | Route |
-|-----------|-------|
-| `src/app/page.tsx` | `/` |
-| `src/app/documentation/page.tsx` | `/documentation` |
+| File Path                               | Route                  |
+| --------------------------------------- | ---------------------- |
+| `src/app/page.tsx`                      | `/`                    |
+| `src/app/documentation/page.tsx`        | `/documentation`       |
 | `src/app/documentation/[slug]/page.tsx` | `/documentation/:slug` |
 
 **Features:**
+
 - **Automatic Code Splitting**: Every page is lazily loaded by default.
 - **Dynamic Routes**: Use `[param]` syntax for dynamic path segments.
 - **Nested Routing**: Create deep hierarchies naturally through folders.
@@ -48,6 +51,7 @@ client/
 │   ├── components/        # Reusable React components
 │   ├── constants/         # Application constants
 │   │── hooks/             # Custom React hooks
+│   ├── lib/               # Utility modules (analytics, etc.)
 │   ├── stores/            # Zustand state management
 │   ├── types/             # TypeScript definitions
 │   ├── utils/             # Utility functions
@@ -56,6 +60,7 @@ client/
 │   └── index.css          # Global styles (Tailwind v4)
 ├── tests/                 # Vitest test suites
 ├── vite.config.ts         # Vite configuration
+├── analytics.readme       # GA4 integration docs (ga4-integration branch)
 └── README.md
 ```
 
@@ -64,28 +69,34 @@ client/
 ## Getting Started
 
 ### 1. Prerequisites
+
 Ensure you have [pnpm](https://pnpm.io/) installed:
+
 ```bash
 npm install -g pnpm
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 pnpm install
 ```
 
 ### 3. Development
+
 ```bash
 pnpm dev
 ```
 
 ### 4. Build & Preview
+
 ```bash
 pnpm build
 pnpm preview
 ```
 
 ### 5. Testing & Quality
+
 ```bash
 pnpm test    # Run Vitest
 pnpm lint    # Run ESLint
@@ -93,5 +104,18 @@ pnpm lint    # Run ESLint
 
 ---
 
+## Analytics (GA4 Integration)
+
+A `ga4-integration` branch is available with Google Analytics 4 support, including GDPR-compliant cookie consent and Consent Mode v2.
+
+```bash
+git clone -b ga4-integration <repo-url>
+```
+
+See [Analytics GA4 Documentation](./docs/analytics.md) for full setup and usage details.
+
+---
+
 ## License
+
 Created by [Joe Kier Hagos](https://github.com/jokerhgs) &copy; 2026.
