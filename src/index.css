@@ -1,8 +1,16 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+@font-face {
+    font-family: 'Manrope';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: swap;
+    src: local('Manrope'), url('/fonts/manrope-variable.woff2') format('woff2-variations'),
+         url('/fonts/manrope-variable.woff2') format('woff2');
+}
 
 @theme {
-    --font-sans: 'Manrope', sans-serif;
+    --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --color-border: hsl(var(--border));
     --color-input: hsl(var(--input));
     --color-ring: hsl(var(--ring));
