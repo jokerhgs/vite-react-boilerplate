@@ -1,8 +1,8 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 @theme {
-    --font-sans: 'Inter', sans-serif;
+    --font-sans: 'Manrope', sans-serif;
     --color-border: hsl(var(--border));
     --color-input: hsl(var(--input));
     --color-ring: hsl(var(--ring));
@@ -66,7 +66,7 @@
         --card-foreground: 240 10% 3.9%;
         --popover: 0 0% 100%;
         --popover-foreground: 240 10% 3.9%;
-        --primary: 265 35% 59%;
+        --primary: 0 84.1% 63.1%;
         --primary-foreground: 0 0% 98%;
         --secondary: 240 4.8% 95.9%;
         --secondary-foreground: 240 5.9% 10%;
@@ -78,18 +78,18 @@
         --destructive-foreground: 0 0% 98%;
         --border: 240 5.9% 90%;
         --input: 240 5.9% 90%;
-        --ring: 265 35% 59%;
+        --ring: 0 84.1% 63.1%;
         --radius: 0.5rem;
     }
 
     .dark {
         --background: 240 10% 3.9%;
         --foreground: 0 0% 98%;
-        --card: 240 10% 3.9%;
+        --card: 240 10% 6.5%;
         --card-foreground: 0 0% 98%;
-        --popover: 240 10% 3.9%;
+        --popover: 240 10% 6.5%;
         --popover-foreground: 0 0% 98%;
-        --primary: 265 35% 59%;
+        --primary: 0 84.1% 63.1%;
         --primary-foreground: 0 0% 98%;
         --secondary: 240 3.7% 15.3%;
         --secondary-foreground: 0 0% 98%;
@@ -101,7 +101,7 @@
         --destructive-foreground: 0 0% 98%;
         --border: 240 3.7% 15.9%;
         --input: 240 3.7% 15.9%;
-        --ring: 265 35% 59%;
+        --ring: 0 84.1% 63.1%;
     }
 
     * {

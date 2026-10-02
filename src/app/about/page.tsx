@@ -9,7 +9,7 @@ export default function About() {
                 </h1>
                 <p className="text-lg text-muted-foreground">
                     This is an example of the new file-based routing system. Any React component
-                    added to the <code className="bg-muted px-2 py-1 rounded">src/pages</code> directory
+                    added to the <code className="bg-muted px-2 py-1 rounded">src/app</code> directory
                     will automatically become a route!
                 </p>
 

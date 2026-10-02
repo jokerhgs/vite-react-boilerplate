@@ -26,8 +26,8 @@ Place your components in `src/app/` following the `folder/page.tsx` convention:
 | File Path | Route |
 |-----------|-------|
 | `src/app/page.tsx` | `/` |
-| `src/app/documentation/page.tsx` | `/documentation` |
-| `src/app/documentation/[slug]/page.tsx` | `/documentation/:slug` |
+| `src/app/about/page.tsx` | `/about` |
+| `src/app/blog/[slug]/page.tsx` | `/blog/:slug` |
 
 **Features:**
 - **Automatic Code Splitting**: Every page is lazily loaded by default.
@@ -44,7 +44,6 @@ client/
 ├── src/
 │   ├── app/               # File-based Routes (Next.js style)
 │   │   ├── page.tsx       # Root route (/)
-│   │   └── documentation/ # Nested route (/documentation)
 │   ├── components/        # Reusable React components
 │   ├── constants/         # Application constants
 │   │── hooks/             # Custom React hooks
@@ -94,4 +93,4 @@ pnpm lint    # Run ESLint
 ---
 
 ## License
-Created by [Joe Kier Hagos](https://github.com/jokerhgs) &copy; 2026.
+Created by [Joker Hagos](https://github.com/jokerhgs) &copy; 2026.
