@@ -54,7 +54,18 @@ Edit the Google Fonts import and `--font-sans` in `src/index.css` (`@theme` bloc
 
 ### Data fetching
 
-Use the shared axios instance in `src/lib/api.ts` (base URL from `VITE_API_URL`, one retry, 401 event). Keep server data in query hooks; keep UI state in `src/stores/ui.ts` (zustand).
+Use the fetch wrapper in `src/lib/api.ts` (`api.get/post/put/patch/del`, base URL from `VITE_API_URL`, one retry, 401 event, `ApiError` on failure). Keep server data in TanStack Query (`src/lib/query-client.ts`, provider in `src/main.tsx`); keep UI state in `src/stores/ui.ts` (zustand).
+
+### Forms & validation
+
+Validate with Valibot schemas + `valibotResolver` from `@hookform/resolvers/valibot`.
+
+```tsx
+import * as v from "valibot";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+
+const Schema = v.object({ email: v.pipe(v.string(), v.email()) });
+```
 
 ## Commands
 
@@ -62,6 +73,8 @@ Use the shared axios instance in `src/lib/api.ts` (base URL from `VITE_API_URL`,
 pnpm install
 pnpm dev
 pnpm build && pnpm preview
+pnpm typecheck
 pnpm test
+pnpm test:watch
 pnpm lint
 ```

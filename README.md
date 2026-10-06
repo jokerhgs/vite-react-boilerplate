@@ -1,96 +1,168 @@
 # Vite + React Boilerplate
 
-A premium, lightweight, and fast boilerplate for modern web development. Now featuring a **Next.js-style file-based routing system** built on top of React Router.
+Lightweight React 19 + Vite 6 starter with **Next.js-style file-based routing** (React Router v7), Tailwind CSS v4 theming, Zustand + TanStack Query state, and Valibot forms.
 
-## Features
+## Stack
 
-- **[Vite](https://vitejs.dev/):** Lightning-fast development and HMR.
-- **[React 19](https://react.dev/):** The latest React features and optimizations.
-- **[File-based Routing](https://reactrouter.com/):** Next.js-inspired `app/` directory routing (without the Next.js overhead).
-- **[Tailwind CSS v4](https://tailwindcss.com/):** Modern utility-first styling with native CSS variables.
-- **[Zustand](https://zustand-bear.github.io/):** Simple, fast, and scalable state management.
-- **[React Hook Form](https://react-hook-form.com/):** Performant and flexible form handling.
-- **[Zod](https://zod.dev/):** TypeScript-first schema validation.
-- **[Vitest](https://vitest.dev/):** Powerful unit testing.
-- **[ESLint](https://eslint.org/):** Code quality and consistency.
+| Area | Tech | Version |
+| :--- | :--- | :--- |
+| Framework | React + React Router | 19.3 / 7.18 |
+| Bundler | Vite + @vitejs/plugin-react | 6.4 / 4.7 |
+| Styling | Tailwind CSS + @tailwindcss/vite | 4.3 |
+| UI state | Zustand | 5.0 |
+| Server state | TanStack React Query | 5.104 |
+| API | fetch wrapper (`src/lib/api.ts`) | — |
+| Forms | React Hook Form + Valibot (`@hookform/resolvers`) | 7.89 / 1.5 |
+| Testing | Vitest + Testing Library + jsdom | 4.1 / 16.3 / 30.1 |
+| Quality | TypeScript (strict) + ESLint | 5.8 / 9.39 |
+
+Why this stack: file routes remove router boilerplate, Query caches server data while Zustand stays for UI, Valibot is smaller than Zod, and the `fetch` wrapper keeps retry/401 behavior without Axios.
 
 ---
 
-## File-based Routing (App Router)
+## Quickstart
 
-This boilerplate uses a custom dynamic routing engine that mimics the Next.js App Router. No more manual route definitions!
+Prerequisites: **Node 22+**, **pnpm 10+**.
 
-### How it works:
-Place your components in `src/app/` following the `folder/page.tsx` convention:
+```bash
+cp .env.example .env   # VITE_API_URL=/api
+pnpm install
+pnpm dev               # http://localhost:5173
+```
+
+| Script | Command | Purpose |
+| :--- | :--- | :--- |
+| Dev | `pnpm dev` | HMR dev server |
+| Build | `pnpm build` | `tsc -b` + production bundle |
+| Typecheck | `pnpm typecheck` | `tsc -b` only |
+| Test | `pnpm test` | `vitest run` |
+| Watch | `pnpm test:watch` | `vitest` watch |
+| Lint | `pnpm lint` | ESLint |
+| Preview | `pnpm preview` | Serve `dist/` |
+
+---
+
+## File-based Routing
+
+No route array — create `src/app/<name>/page.tsx` and it becomes `/<name>`. Engine: `src/router.tsx` (`import.meta.glob`, `[param]` -> `:param`, static-first sort, `lazy()` + `Suspense`).
 
 | File Path | Route |
 |-----------|-------|
 | `src/app/page.tsx` | `/` |
 | `src/app/about/page.tsx` | `/about` |
-| `src/app/blog/[slug]/page.tsx` | `/blog/:slug` |
+| `src/app/users/[id]/page.tsx` | `/users/:id` |
 
-**Features:**
-- **Automatic Code Splitting**: Every page is lazily loaded by default.
-- **Dynamic Routes**: Use `[param]` syntax for dynamic path segments.
-- **Nested Routing**: Create deep hierarchies naturally through folders.
+| File | Purpose |
+|------|---------|
+| `page.tsx` | Route entry (`default` export required) |
+| `layout.tsx` | Nests around subtree (root outermost) |
+| `loading.tsx` | `Suspense` fallback (deepest wins) |
+| `not-found.tsx` | `*` catch-all |
+| `error.tsx` | `errorElement` boundary |
+
+```tsx
+// src/app/pricing/page.tsx -> /pricing
+export default function Pricing() {
+  return <h1>Pricing</h1>;
+}
+
+// src/app/users/[id]/page.tsx -> /users/:id
+import { useParams } from "react-router";
+export default function UserPage() {
+  const { id } = useParams<{ id: string }>();
+  return <h1>User {id}</h1>;
+}
+```
+
+---
+
+## Usage
+
+### Data fetching (Query + api)
+
+```tsx
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib";
+
+function Users() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => api.get<{ id: string }[]>("/users"),
+  });
+  if (isLoading) return <p>Loading…</p>;
+  if (error) return <p>Failed to load.</p>;
+  return <ul>{data?.map((u) => <li key={u.id}>{u.id}</li>)}</ul>;
+}
+```
+
+`api.get/post/put/patch/del` uses `VITE_API_URL` (default `/api`), JSON headers, 10s timeout, one retry on network/429/5xx, `auth:unauthorized` event on 401, and throws `ApiError { status, body }`.
+
+### Forms (Hook Form + Valibot)
+
+```tsx
+import * as v from "valibot";
+import { useForm } from "react-hook-form";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+
+const Schema = v.object({
+  email: v.pipe(v.string(), v.email("Enter a valid email")),
+  password: v.pipe(v.string(), v.minLength(8, "Minimum 8 characters")),
+});
+
+type Form = v.InferOutput<typeof Schema>;
+
+const { register, handleSubmit } = useForm<Form>({ resolver: valibotResolver(Schema) });
+```
+
+### UI state (Zustand) vs theme
+
+```tsx
+import { useUiStore } from "@/stores";
+const toggleSidebar = useUiStore((s) => s.toggleSidebar);
+```
+
+Toggle dark mode with `ThemeToggle` from `@/components/theme-toggle` (persists to `localStorage`). Theme tokens live in `src/index.css` (`:root` / `.dark`); use semantic classes (`bg-background`, `text-foreground`, `border-border`) + `cn()` from `@/lib`.
 
 ---
 
 ## Folder Structure
 
 ```text
-client/
 ├── public/                 # Static assets
 ├── src/
-│   ├── app/               # File-based Routes (Next.js style)
-│   │   ├── page.tsx       # Root route (/)
-│   ├── components/        # Reusable React components
-│   ├── constants/         # Application constants
-│   │── hooks/             # Custom React hooks
-│   ├── stores/            # Zustand state management
-│   ├── types/             # TypeScript definitions
-│   ├── utils/             # Utility functions
-│   ├── router.tsx         # The Routing Engine
-│   ├── main.tsx           # Entry point
-│   └── index.css          # Global styles (Tailwind v4)
-├── tests/                 # Vitest test suites
-├── vite.config.ts         # Vite configuration
-└── README.md
+│   ├── app/                # Routes: page/layout/loading/not-found/error
+│   ├── components/         # theme-toggle.tsx, shared UI
+│   ├── hooks/              # use-media-query.ts
+│   ├── lib/                # api.ts, cn.ts, query-client.ts
+│   ├── stores/             # ui.ts (useUiStore)
+│   ├── types/              # LayoutProps, PageProps
+│   ├── index.css           # Tailwind theme + variables
+│   ├── main.tsx            # QueryClientProvider + BrowserRouter
+│   └── router.tsx          # Routing engine
+├── tests/
+│   ├── setup.ts            # jest-dom
+│   ├── unit/               # router, cn, ui-store, api, query-client, validation
+│   └── integration/        # Integration tests
+├── .env.example            # VITE_API_URL
+├── vite.config.ts / vitest.config.ts  # @ -> ./src, jsdom + setup
+└── documentation.md        # Extended guide
 ```
+
+Conventions: `@/` imports only, `kebab-case.tsx` + `PascalCase` components, `use-*` hooks, `use*Store` stores, `default` export for pages / `named` for shared. See `AGENTS.md` for agent rules.
 
 ---
 
-## Getting Started
+## Testing
 
-### 1. Prerequisites
-Ensure you have [pnpm](https://pnpm.io/) installed:
 ```bash
-npm install -g pnpm
+pnpm test        # single run (jsdom + jest-dom)
+pnpm test:watch # watch mode
 ```
 
-### 2. Install Dependencies
-```bash
-pnpm install
-```
-
-### 3. Development
-```bash
-pnpm dev
-```
-
-### 4. Build & Preview
-```bash
-pnpm build
-pnpm preview
-```
-
-### 5. Testing & Quality
-```bash
-pnpm test    # Run Vitest
-pnpm lint    # Run ESLint
-```
+Component tests use `@testing-library/react` + `user-event` (assert roles/text). `fetch` is mocked via `vi.stubGlobal`; Query tests use `createQueryClient()` for isolation.
 
 ---
 
 ## License
-Created by [Joker Hagos](https://github.com/jokerhgs) &copy; 2026.
+
+Created by [Joker Hagos](https://github.com/jokerhgs) © 2026.
